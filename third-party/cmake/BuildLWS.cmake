@@ -1,0 +1,23 @@
+ExternalProject_add(
+	libwebsockets
+
+	PREFIX ${DEPS_BUILD_DIR}/lws
+
+	GIT_REPOSITORY "https://github.com/warmcat/libwebsockets.git"
+	GIT_TAG "v2.0-stable"
+
+	UPDATE_COMMAND ""
+	PATCH_COMMAND ""
+	TEST_COMMAND ""
+
+	CMAKE_ARGS
+		-DLWS_WITHOUT_CLIENT=ON
+		-DLWS_WITHOUT_TESTAPPS=ON
+		-DLWS_WITHOUT_DAEMONIZE=OFF
+       #-DLWS_WITH_LIBUV=ON
+        -DLWS_WITH_SSL=OFF
+		-DCMAKE_INSTALL_PREFIX=${DEPS_INSTALL_DIR}
+       #-DLIB_SUFFIX=64
+       #-DLWS_WITH_STATIC=ON
+       #-DLWS_WITH_SHARED=OFF
+)
