@@ -1,11 +1,12 @@
 #include <stdlib.h>
-#include <pthread.h>
-
 #include <unistd.h>
-#include <sys/wait.h>
+#include <pthread.h>
 #include <sys/socket.h>
 
-#include "requests.h"
+#include "url_fetch.h"
+
+const char *script_path = "python/get_video_info.py";
+
 
 /* Start the url fetcher python script.
  *
@@ -15,7 +16,7 @@
  * Note that, if execlp() failed, upon writing we'll recieve SIGPIPE, and
  * reading from the socket will result in EOF.
  *
- * @param script_path  The relative or complete path to the python script.
+ * @script_path  The relative or complete path to the python script.
  * @return A socket file descriptor used to communicate with the subprocess
  *         over its standard IO streams, or -1 on failure.
  */
@@ -54,12 +55,13 @@ int fork_url_fetcher(const char *script_path)
     return sockpair[1]; // this is the parent's socket-end
 }
 
+
 /* Thread routine that communicates with the fetcher script in the background.
  *
- * @param args  
+ * @args  
  * @return NULL - never returns
  */
 void *url_fetcher_thread(void *args)
 {
-
+    int sockfd = fork_url_fetcher(script_path);
 }

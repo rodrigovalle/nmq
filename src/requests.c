@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include "requests.h"
 
+
 static CURL *curl;
 static char errbuf[CURL_ERROR_SIZE];
 
-static size_t write_buffer(char *ptr, size_t size, size_t nmemb, void *userdata)
+static size_t __write_buffer(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
     size_t realsize = size * nmemb;
     struct DynamicBuffer *mem = (struct DynamicBuffer *)userdata;
@@ -26,13 +27,6 @@ static size_t write_buffer(char *ptr, size_t size, size_t nmemb, void *userdata)
     return realsize;
 }
 
-CURLcode request_url(const char url[], struct DynamicBuffer *buf)
-{
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, buf);
-    CURLcode r = curl_easy_perform(curl);
-    return r;
-}
 
 void start_curl()
 {
@@ -45,13 +39,23 @@ void start_curl()
     curl = curl_easy_init();
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
     curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_buffer);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, __write_buffer);
 }
+
 
 void stop_curl()
 {
     curl_easy_cleanup(curl);
     curl_global_cleanup();
+}
+
+
+CURLcode request_url(const char url[], struct DynamicBuffer *buf)
+{
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, buf);
+    CURLcode r = curl_easy_perform(curl);
+    return r;
 }
 
 /* EXAMPLE USAGE */

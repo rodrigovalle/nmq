@@ -1,3 +1,6 @@
+#ifndef CALLBACK_H_
+#define CALLBACK_H_
+
 struct per_session_data {
     int writeout;
     //uint8_t buf[LWS_PRE + MAX_PAYLOAD];
@@ -15,3 +18,5 @@ int callback_ws(
         void *in,
         size_t len
     );
+
+#endif /* CALLBACK_H_ */

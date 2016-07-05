@@ -151,7 +151,7 @@ def main():
     
     #print(get_url(v, tpool)) # used to test
     for line in sys.stdin:
-        print(get_url(v, tpool), flush=True)
+        print(get_url(line.strip(), tpool), flush=True)
 
 if __name__ == "__main__":
     main()
